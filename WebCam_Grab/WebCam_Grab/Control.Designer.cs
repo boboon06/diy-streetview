@@ -63,8 +63,8 @@
             // 
             // ImagePathTextbox
             // 
-            this.ImagePathTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ImagePathTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.ImagePathTextbox.Location = new System.Drawing.Point(71, 55);
             this.ImagePathTextbox.Name = "ImagePathTextbox";
             this.ImagePathTextbox.ReadOnly = true;
@@ -104,9 +104,9 @@
             // 
             // Checkerpanel
             // 
-            this.Checkerpanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Checkerpanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.Checkerpanel.AutoScroll = true;
             this.Checkerpanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Checkerpanel.Location = new System.Drawing.Point(12, 81);
@@ -244,7 +244,7 @@
             // 
             this.serialPort.DtrEnable = true;
             this.serialPort.Handshake = System.IO.Ports.Handshake.XOnXOff;
-            this.serialPort.PortName = "COM2";
+            this.serialPort.PortName = "COM3";
             // 
             // labelDirection
             // 
