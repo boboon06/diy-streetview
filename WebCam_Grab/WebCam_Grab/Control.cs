@@ -49,7 +49,6 @@ namespace WebCam_Grab
         private StreamWriter Dataout; // Used to create a Log of data, to be used in the Post Proccessing and Web Data (The file created contains GUIDs, GPS info, Date, Time, How many Cameras are used at this time)
         private bool[] TakePicture = new bool[VideoDevices.Count]; // This is used to tell the Camera "NewFrame" thread to take a picture.
         private Bitmap[] LastFrame = new Bitmap[VideoDevices.Count];
-        private int[] camframe = new int[VideoDevices.Count];
 
         public Control()
         {
@@ -63,15 +62,7 @@ namespace WebCam_Grab
             }
             Dataout = new StreamWriter(imagepath + "\\imagelog.csv",true,Encoding.UTF8); // Init the CSV that stores the data (Less Time Expensive, Less RAM intensive)
             Dataout.AutoFlush = true; // Make it automaticly Save the data.
-            try
-            {
-                serialPort.Open(); // Open the port for the GPS.
-            }
-            catch (Exception Error)
-            {
-                MessageBox.Show(Error.Message);
-                //this.Close();
-            }
+            serialPort.Open(); // Open the port for the GPS.
             ImagePathTextbox.Text = imagepath; // Init the Directory Text Box.
             folderBrowser.SelectedPath = imagepath; // Set the Default Path for the folder Browser.
             int CountDevices = 0;
@@ -99,7 +90,6 @@ namespace WebCam_Grab
                 CamSource.Add(Cameras);
                 CountDevices++;
             }
-            Console.WriteLine(CountDevices);
             /// This sets all the sources up.
             InitSources();
             CountDevices = 0;
@@ -116,7 +106,6 @@ namespace WebCam_Grab
                 Checkerpanel.Controls.Add(CheckedDevices[CountDevices]);
                 CountDevices++;
             }
-            Console.WriteLine(CountDevices);
             /// And add Refferences of the Picture boxes to an Array, for simplicity and more effecent camera Management.
                 images[0] = pictureBox1;
                 images[1] = pictureBox2;
@@ -146,7 +135,6 @@ namespace WebCam_Grab
                 }
                 CountCameras++;
             }
-            Console.WriteLine(CountCameras + " Cameras Stopped");
             Dataout.Close();
             Dataout.Dispose();
             serialPort.Close();
@@ -171,16 +159,19 @@ namespace WebCam_Grab
         /// <param name="e"></param>
         private void buttonCapture_Click(object sender, EventArgs e)
         {
+            {
             int CountClear = 0;
             while (CountClear < images.Length)
             {
                 images[CountClear].ImageLocation = "";
                 CountClear++;
             }
+
+            }
             guid = Guid.NewGuid();
             int CountChecked = 0;
             int CounttmpCID = 0;
-            while (CountChecked < CheckedDevices.Length)
+            while (CountChecked < CheckedDevices.Length && CountChecked < Cam.Length)
             {
                 if (CheckedDevices[CountChecked].Checked == true)
                 {
@@ -190,8 +181,6 @@ namespace WebCam_Grab
                 }
                 CountChecked++;
             }
-            Cam[0].Start();
-            Console.WriteLine("There are " + CounttmpCID + " Cameras selected");
             if (CounttmpCID > 0)
             {
                 Dataout.WriteLine(guid + "," + GPSLAT + "," + GPSLONG + "," + DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year + "," + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + "," + CounttmpCID);
@@ -207,51 +196,30 @@ namespace WebCam_Grab
         /// <param name="CID">The Camera's Runtime ID (Unlikely to stay the same)</param>
         private void Cam_NewFrame(object sender, NewFrameEventArgs args, string DevID, int CID)
         {
-            if (camframe[CID] >= 60)
+            Bitmap b = args.Frame;
+            if (TakePicture[CID] == true)
             {
-                Bitmap b = (Bitmap)args.Frame.Clone();
-                Cam[CID].SignalToStop();
-                if ((CID + 1) < Cam.Length && Cam[CID + 1] != null)
+                TakePicture[CID] = false;
+                string tmppath = imagepath + "\\RAW";
+                b.Save(tmppath + "\\" + guid + "." + DevID + ".bmp"); // Uncommpressed Storage of the Raw Data Stream, Better for Time and Quality.
+                int CounttmpCID = 0;
+                while (CounttmpCID < tmpcid.Length && tmpcid[CounttmpCID].ToString() != DevID)
                 {
-                    Cam[CID + 1].Start();
+                    CounttmpCID++; // If the Camera's DevID isn't the same as the current CID's Dev ID, then We need to try the next one.
                 }
-                args = null;
-                if (TakePicture[CID] == true)
+                if (CounttmpCID < tmpcid.Length)
                 {
-                    try
-                    {
-                        Console.WriteLine("Camera " + DevID + "[" + CID + "] has taken a Picture");
-                        string tmppath = imagepath + "\\RAW";
-                        b.Save(tmppath + "\\" + guid + "." + DevID + ".bmp"); // Uncommpressed Storage of the Raw Data Stream, Better for Time and Quality.
-                        int CounttmpCID = 0;
-                        while (CounttmpCID < tmpcid.Length && tmpcid[CounttmpCID].ToString() != null && tmpcid[CounttmpCID].ToString() != DevID)
-                        {
-                            CounttmpCID++; // If the Camera's DevID isn't the same as the current CID's Dev ID, then We need to try the next one.
-                        }
-                        if (CounttmpCID < tmpcid.Length)
-                        {
-                            images[CounttmpCID].ImageLocation = tmppath + "\\" + guid + "." + DevID + ".bmp"; // If it is, then update the Image Boxes with the Latest Picture.
-                        }
-                        TakePicture[CID] = false;
-                    }
-                    catch (Exception error)
-                    {
-                        MessageBox.Show(error.Message);
-                    }
+                    images[CounttmpCID].ImageLocation = tmppath + "\\" + guid + "." + DevID + ".bmp"; // If it is, then update the Image Boxes with the Latest Picture.
                 }
-                LastFrame[CID] = b;
             }
-            else
-            {
-                camframe[CID]++;
-            }
+            LastFrame[CID] = b;
         }
         /// <summary>
         /// Initialises the Camera Sources
         /// </summary>
         private void InitSources()
         {
-            Size FrameSize = new Size(1280, 720); // 1600x1200 = 2 MP
+            Size FrameSize = new Size(1600, 1200); // 1600x1200 = 2 MP
             int CountCameraInit = 0;
             while (CountCameraInit < CamSource.Count)
             {
@@ -306,17 +274,18 @@ namespace WebCam_Grab
             int NumberChecked = 0;
             while (CountChecked < CheckedDevices.Length && CountChecked < Cam.Length)
             {
-                //if (CheckedDevices[CountChecked].Checked == true && Cam[CountChecked].IsRunning == false)
-                //{
-                //    Cam[CountChecked].Start();
-                   NumberChecked++;
-                //}
-                if (CheckedDevices[CountChecked].Checked == false && Cam[CountChecked].IsRunning == true)
+                if (CheckedDevices[CountChecked].Checked == true && Cam[CountChecked].IsRunning == false)
+                {
+                    Cam[CountChecked].Start();
+                    NumberChecked++;
+                }
+                else if (CheckedDevices[CountChecked].Checked == false && Cam[CountChecked].IsRunning == true)
                 {
                     Cam[CountChecked].SignalToStop();
                 }
                 CountChecked++;
             }
+            Thread.Sleep(1000);
             if (NumberChecked > 0)
             {
                 LabelCameraStatus.Text = "Camera's Ready.";
@@ -326,7 +295,7 @@ namespace WebCam_Grab
             {
                 LabelCameraStatus.Text = "None Selected.";
             }
-            Console.WriteLine("CountChecked = "+ CountChecked);
+
         }
         /// <summary>
         /// Get the Current GPS Location data, Has to parse the NMEA Data from the Android Device.
@@ -337,58 +306,55 @@ namespace WebCam_Grab
             {
                 GPSPRESENT = true; // If we have Data flowing, Presume it's the GPS Device.
                 string data = serialPort.ReadExisting(); // Read it.
-                if (data != "")
+                string[] strArr = data.Split('$'); // Split it.
+                for (int i = 0; i < strArr.Length; i++)
                 {
-                    string[] strArr = data.Split('$'); // Split it.
-                    for (int i = 0; i < strArr.Length; i++)
+                    string strTemp = strArr[i]; // Store it.
+                    string[] lineArr = strTemp.Split(','); // Split it AGAIN.
+                    if (lineArr[0] == "GPVTG") // If it's the line that talks about Heading...
                     {
-                        string strTemp = strArr[i]; // Store it.
-                        string[] lineArr = strTemp.Split(','); // Split it AGAIN.
-                        if (lineArr[0] == "GPVTG") // If it's the line that talks about Heading...
+                        if (lineArr[3] == "nan" || lineArr[3] == "") // If it's not Valid.
                         {
-                            if (lineArr[3] == "nan" || lineArr[3] == "") // If it's not Valid.
-                            {
-                                labelDirection.Text = "Direction: None supplied from GPS";
-                            }
-                            else // It must be VALID!
-                            {
-                                labelDirection.Text = "Direction: " + lineArr[3];
-                            }
+                            labelDirection.Text = "Direction: None supplied from GPS";
                         }
-                        else if (lineArr[0] == "GPGGA") // This is the line that Talks about GPS Lat and Long
+                        else // It must be VALID!
                         {
-                            try
-                            {
-                                ///
-                                /// Don't understand what this does?
-                                /// Read up on the NMEA Standard.
-                                /// 
-
-                                //Latitude
-                                Double dLat = Convert.ToDouble(lineArr[2]);
-                                dLat = dLat / 100;
-                                string[] lat = dLat.ToString().Split('.');
-                                GPSLAT = lat[0].ToString() + "." + ((Convert.ToDouble(lat[1]) / 60)).ToString("#####") + lineArr[3].ToString();
-
-                                //Longitude
-                                Double dLon = Convert.ToDouble(lineArr[4]);
-                                dLon = dLon / 100;
-                                string[] lon = dLon.ToString().Split('.');
-                                GPSLONG = lon[0].ToString() + "." + ((Convert.ToDouble(lon[1]) / 60)).ToString("#####") + lineArr[5].ToString();
-                                GPSSTATUS = 1;
-                            }
-                            catch
-                            {
-                                GPSSTATUS = 0; // If that fails, the GPS is Broke.
-                            }
-                        }
-                        else if (strTemp != "")
-                        {
-                            Console.Write(strTemp + Environment.NewLine); //DEBUG: Pipe the RAW lines to the Debug Console.
+                            labelDirection.Text = "Direction: " + lineArr[3];
                         }
                     }
-                    Console.WriteLine(); //DEBUG: Write the Console Line.
+                    else if (lineArr[0] == "GPGGA") // This is the line that Talks about GPS Lat and Long
+                    {
+                        try
+                        {
+                            ///
+                            /// Don't understand what this does?
+                            /// Read up on the NMEA Standard.
+                            /// 
+
+                            //Latitude
+                            Double dLat = Convert.ToDouble(lineArr[2]);
+                            dLat = dLat / 100;
+                            string[] lat = dLat.ToString().Split('.');
+                            GPSLAT = lat[0].ToString() + "." + ((Convert.ToDouble(lat[1]) / 60)).ToString("#####") + lineArr[3].ToString();
+
+                            //Longitude
+                            Double dLon = Convert.ToDouble(lineArr[4]);
+                            dLon = dLon / 100;
+                            string[] lon = dLon.ToString().Split('.');
+                            GPSLONG = lon[0].ToString() + "." + ((Convert.ToDouble(lon[1]) / 60)).ToString("#####") + lineArr[5].ToString();
+                            GPSSTATUS = 1;
+                        }
+                        catch
+                        {
+                            GPSSTATUS = 0; // If that fails, the GPS is Broke.
+                        }
+                    }
+                    else if (strTemp != "")
+                    {
+                        Console.Write(strTemp + Environment.NewLine); //DEBUG: Pipe the RAW lines to the Debug Console.
+                    }
                 }
+                Console.WriteLine(); //DEBUG: Write the Console Line.
             }
             else
             {
