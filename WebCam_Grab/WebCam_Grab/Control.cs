@@ -49,6 +49,7 @@ namespace WebCam_Grab
         private StreamWriter Dataout; // Used to create a Log of data, to be used in the Post Proccessing and Web Data (The file created contains GUIDs, GPS info, Date, Time, How many Cameras are used at this time)
         private bool[] TakePicture = new bool[VideoDevices.Count]; // This is used to tell the Camera "NewFrame" thread to take a picture.
         private Bitmap[] LastFrame = new Bitmap[VideoDevices.Count];
+        private int[] camframe = new int[VideoDevices.Count];
 
         public Control()
         {
@@ -194,6 +195,7 @@ namespace WebCam_Grab
             }
             LastGUIDLabel.Text = "Last GUID: " + guid;
             Cam[0].Start();
+            Cam[1].Start();
         }
         /// <summary>
         /// This is fired when ever the camera has a New Frame Available, and only stores them when it should, otherwise it just disposes of them.
@@ -204,28 +206,36 @@ namespace WebCam_Grab
         /// <param name="CID">The Camera's Runtime ID (Unlikely to stay the same)</param>
         private void Cam_NewFrame(object sender, NewFrameEventArgs args, string DevID, int CID)
         {
-            Bitmap b = (Bitmap)args.Frame.Clone();
-            Cam[CID].SignalToStop();
-            if ((CID + 1) < Cam.Length && Cam[CID + 1] != null)
+            if (camframe[CID] >= 60)
             {
-                Cam[CID + 1].Start();
+                Bitmap b = (Bitmap)args.Frame.Clone();
+                Cam[CID].SignalToStop();
+                if ((CID + 2) < Cam.Length && Cam[CID + 2] != null)
+                {
+                    Cam[CID + 2].Start();
+                }
+                if (TakePicture[CID] == true)
+                {
+                    TakePicture[CID] = false;
+                    string tmppath = imagepath + "\\RAW";
+                    b.Save(tmppath + "\\" + guid + "." + DevID + ".bmp"); // Uncommpressed Storage of the Raw Data Stream, Better for Time and Quality.
+                    int CounttmpCID = 0;
+                    while (CounttmpCID < tmpcid.Length && tmpcid[CounttmpCID].ToString() != DevID)
+                    {
+                        CounttmpCID++; // If the Camera's DevID isn't the same as the current CID's Dev ID, then We need to try the next one.
+                    }
+                    if (CounttmpCID < tmpcid.Length)
+                    {
+                        images[CounttmpCID].ImageLocation = tmppath + "\\" + guid + "." + DevID + ".bmp"; // If it is, then update the Image Boxes with the Latest Picture.
+                    }
+                }
+                LastFrame[CID] = b;
+                camframe[CID] = 0;
             }
-            if (TakePicture[CID] == true)
+            else
             {
-                TakePicture[CID] = false;
-                string tmppath = imagepath + "\\RAW";
-                b.Save(tmppath + "\\" + guid + "." + DevID + ".bmp"); // Uncommpressed Storage of the Raw Data Stream, Better for Time and Quality.
-                int CounttmpCID = 0;
-                while (CounttmpCID < tmpcid.Length && tmpcid[CounttmpCID].ToString() != DevID)
-                {
-                    CounttmpCID++; // If the Camera's DevID isn't the same as the current CID's Dev ID, then We need to try the next one.
-                }
-                if (CounttmpCID < tmpcid.Length)
-                {
-                    images[CounttmpCID].ImageLocation = tmppath + "\\" + guid + "." + DevID + ".bmp"; // If it is, then update the Image Boxes with the Latest Picture.
-                }
+                camframe[CID]++;
             }
-            LastFrame[CID] = b;
         }
         /// <summary>
         /// Initialises the Camera Sources
