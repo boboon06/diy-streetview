@@ -62,7 +62,14 @@ namespace WebCam_Grab
             }
             Dataout = new StreamWriter(imagepath + "\\imagelog.csv",true,Encoding.UTF8); // Init the CSV that stores the data (Less Time Expensive, Less RAM intensive)
             Dataout.AutoFlush = true; // Make it automaticly Save the data.
-            serialPort.Open(); // Open the port for the GPS.
+            try
+            {
+                serialPort.Open(); // Open the port for the GPS.
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+            }
             ImagePathTextbox.Text = imagepath; // Init the Directory Text Box.
             folderBrowser.SelectedPath = imagepath; // Set the Default Path for the folder Browser.
             int CountDevices = 0;
@@ -186,6 +193,7 @@ namespace WebCam_Grab
                 Dataout.WriteLine(guid + "," + GPSLAT + "," + GPSLONG + "," + DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year + "," + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + "," + CounttmpCID);
             }
             LastGUIDLabel.Text = "Last GUID: " + guid;
+            Cam[0].Start();
         }
         /// <summary>
         /// This is fired when ever the camera has a New Frame Available, and only stores them when it should, otherwise it just disposes of them.
@@ -196,7 +204,12 @@ namespace WebCam_Grab
         /// <param name="CID">The Camera's Runtime ID (Unlikely to stay the same)</param>
         private void Cam_NewFrame(object sender, NewFrameEventArgs args, string DevID, int CID)
         {
-            Bitmap b = args.Frame;
+            Bitmap b = (Bitmap)args.Frame.Clone();
+            Cam[CID].SignalToStop();
+            if ((CID + 1) < Cam.Length && Cam[CID + 1] != null)
+            {
+                Cam[CID + 1].Start();
+            }
             if (TakePicture[CID] == true)
             {
                 TakePicture[CID] = false;
@@ -271,31 +284,16 @@ namespace WebCam_Grab
             buttonCapture.Enabled = false;
             LabelCameraStatus.Text = "Camera's Warming";
             int CountChecked = 0;
-            int NumberChecked = 0;
             while (CountChecked < CheckedDevices.Length && CountChecked < Cam.Length)
             {
-                if (CheckedDevices[CountChecked].Checked == true && Cam[CountChecked].IsRunning == false)
-                {
-                    Cam[CountChecked].Start();
-                    NumberChecked++;
-                }
-                else if (CheckedDevices[CountChecked].Checked == false && Cam[CountChecked].IsRunning == true)
+                if (CheckedDevices[CountChecked].Checked == false && Cam[CountChecked].IsRunning == true)
                 {
                     Cam[CountChecked].SignalToStop();
                 }
                 CountChecked++;
             }
-            Thread.Sleep(1000);
-            if (NumberChecked > 0)
-            {
-                LabelCameraStatus.Text = "Camera's Ready.";
-                buttonCapture.Enabled = true;
-            }
-            else
-            {
-                LabelCameraStatus.Text = "None Selected.";
-            }
-
+               LabelCameraStatus.Text = "Camera's Ready.";
+               buttonCapture.Enabled = true;
         }
         /// <summary>
         /// Get the Current GPS Location data, Has to parse the NMEA Data from the Android Device.

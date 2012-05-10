@@ -18,3 +18,20 @@ C:\Users\Boboon\Documents\Visual Studio 2010\Projects\WebCam_Grab\WebCam_Grab\ob
 C:\Users\Boboon\Documents\Visual Studio 2010\Projects\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.TrustInfo.xml
 C:\Users\Boboon\Documents\Visual Studio 2010\Projects\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.exe.manifest
 C:\Users\Boboon\Documents\Visual Studio 2010\Projects\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.application
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.exe
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\bin\Debug\WebCam_Grab.exe.manifest
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\bin\Debug\WebCam_Grab.application
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\bin\Debug\WebCam_Grab.exe
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\bin\Debug\WebCam_Grab.pdb
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\bin\Debug\AForge.xml
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\bin\Debug\AForge.Video.xml
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\bin\Debug\AForge.Video.DirectShow.xml
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.Control.resources
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.Properties.Resources.resources
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.TrustInfo.xml
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.exe.manifest
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.application
+D:\git\DIY_Streetview\WebCam_Grab\WebCam_Grab\obj\x86\Debug\WebCam_Grab.pdb
