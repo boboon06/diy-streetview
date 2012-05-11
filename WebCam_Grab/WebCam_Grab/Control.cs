@@ -210,6 +210,12 @@ namespace WebCam_Grab
             {
                 if (camframe[CID] >= 90)
                 {
+                    Bitmap b = (Bitmap)args.Frame.Clone();
+                    Cam[CID].SignalToStop();
+                    if ((CID + 2) < Cam.Length && Cam[CID + 2] != null)
+                    {
+                        Cam[CID + 2].Start();
+                    }
                     TakePicture[CID] = false;
                     Bitmap b = (Bitmap)args.Frame.Clone();
                     Cam[CID].SignalToStop();
