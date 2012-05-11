@@ -206,17 +206,17 @@ namespace WebCam_Grab
         /// <param name="CID">The Camera's Runtime ID (Unlikely to stay the same)</param>
         private void Cam_NewFrame(object sender, NewFrameEventArgs args, string DevID, int CID)
         {
-            if (camframe[CID] >= 60)
+            if (TakePicture[CID] == true)
             {
-                Bitmap b = (Bitmap)args.Frame.Clone();
-                Cam[CID].SignalToStop();
-                if ((CID + 2) < Cam.Length && Cam[CID + 2] != null)
-                {
-                    Cam[CID + 2].Start();
-                }
-                if (TakePicture[CID] == true)
+                if (camframe[CID] >= 90)
                 {
                     TakePicture[CID] = false;
+                    Bitmap b = (Bitmap)args.Frame.Clone();
+                    Cam[CID].SignalToStop();
+                    if ((CID + 2) < Cam.Length && Cam[CID + 2] != null)
+                    {
+                        Cam[CID + 2].Start();
+                    }
                     string tmppath = imagepath + "\\RAW";
                     b.Save(tmppath + "\\" + guid + "." + DevID + ".bmp"); // Uncommpressed Storage of the Raw Data Stream, Better for Time and Quality.
                     int CounttmpCID = 0;
@@ -228,13 +228,21 @@ namespace WebCam_Grab
                     {
                         images[CounttmpCID].ImageLocation = tmppath + "\\" + guid + "." + DevID + ".bmp"; // If it is, then update the Image Boxes with the Latest Picture.
                     }
+                    LastFrame[CID] = b;
+                    camframe[CID] = 0;
                 }
-                LastFrame[CID] = b;
-                camframe[CID] = 0;
+                else
+                {
+                    camframe[CID]++;
+                }
             }
             else
             {
-                camframe[CID]++;
+                Cam[CID].SignalToStop();
+                if ((CID + 2) < Cam.Length && Cam[CID + 2] != null)
+                {
+                    Cam[CID + 2].Start();
+                }
             }
         }
         /// <summary>
