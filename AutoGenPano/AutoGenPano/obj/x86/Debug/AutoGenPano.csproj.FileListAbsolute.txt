@@ -1,0 +1,11 @@
+C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\obj\x86\Debug\AutoGenPano.Form1.resources
+C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\obj\x86\Debug\AutoGenPano.Properties.Resources.resources
+C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\bin\Debug\AutoGenPano.exe
+C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\bin\Debug\AutoGenPano.pdb
+C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\obj\x86\Debug\AutoGenPano.exe
+C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\obj\x86\Debug\AutoGenPano.pdb
+D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\obj\x86\Debug\AutoGenPano.exe
+D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\obj\x86\Debug\AutoGenPano.pdb
