@@ -20,6 +20,16 @@ namespace AutoGenPano
         private string libpanopath = @"D:\Joshua\Waikato University\COMP 241\DIY Street View\PanoTools\PanoTools";
         private void button1_Click(object sender, EventArgs e)
         {
+            if (!File.Exists(libpanopath + "\\PTStitcher.exe"))
+            {
+                MessageBox.Show("ERROR: PanoTools NOT FOUND");
+                this.Close();
+            }
+            if (!File.Exists(libpanopath + "\\diystreetview.txt"))
+            {
+                MessageBox.Show("ERROR: PanoTools Stitching Script NOT FOUND");
+                this.Close();
+            }
             StreamReader csvinput = new StreamReader(imagepath + "\\imagelog.csv");
             while (csvinput.Peek() != -1)
             {
@@ -31,9 +41,15 @@ namespace AutoGenPano
                 }
                 else
                 {
-                    //TODO I need to set up the Constants for each of the cameras
+                    // TODO I need to set up the Constants for each of the cameras
                     // and make C# Move them to the Pano Tools folder, and change their names to constents.
+                    // ALSO I need to set up the PT Script with said photos and TEST THEM.
                     // AFTER CHRIS MAKES THE RIG.
+                    System.Diagnostics.Process ptsticher = new System.Diagnostics.Process();
+                    ptsticher.StartInfo.FileName = libpanopath + "\\PTStitcher.exe";
+                    ptsticher.StartInfo.Arguments = "-o " + values[0] + " diystreetview.txt";
+                    ptsticher.Start();
+                    ptsticher.WaitForExit();
                 }
             }
         }
