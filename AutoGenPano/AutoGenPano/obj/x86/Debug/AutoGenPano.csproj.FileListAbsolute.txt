@@ -9,3 +9,10 @@ C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\obj\x86\Debug\AutoG
 C:\Users\Boboon\AppData\Local\Temporary Projects\AutoGenPano\obj\x86\Debug\AutoGenPano.pdb
 D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\obj\x86\Debug\AutoGenPano.exe
 D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\obj\x86\Debug\AutoGenPano.pdb
+D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\bin\Debug\AutoGenPano.exe
+D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\bin\Debug\AutoGenPano.pdb
+D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\obj\x86\Debug\AutoGenPano.Form1.resources
+D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\obj\x86\Debug\AutoGenPano.Properties.Resources.resources
+D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\git\DIY_Streetview\AutoGenPano\AutoGenPano\obj\x86\Debug\GenerateResource.write.1.tlog

@@ -21,7 +21,21 @@ namespace AutoGenPano
         private void button1_Click(object sender, EventArgs e)
         {
             StreamReader csvinput = new StreamReader(imagepath + "\\imagelog.csv");
-
+            while (csvinput.Peek() != -1)
+            {
+                string line = csvinput.ReadLine();
+                string[] values = line.Split(',');
+                if (values[5] != "8")
+                {
+                    MessageBox.Show("Error: GUID " + values[0] + " doesn't have all 8 cameras taking pictures... Skipping.","Panorama Generation Error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    //TODO I need to set up the Constants for each of the cameras
+                    // and make C# Move them to the Pano Tools folder, and change their names to constents.
+                    // AFTER CHRIS MAKES THE RIG.
+                }
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
