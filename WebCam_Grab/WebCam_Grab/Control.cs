@@ -26,7 +26,7 @@ namespace WebCam_Grab
 {
     public partial class Control : Form
     {
-        private string imagepath = @"D:\Joshua\Waikato University\COMP 241\DIY Street View\Image Test"; // This WILL be put into a Config file on the Local filesystem, IN THE FUTURE.
+        private string imagepath = @"D:\Joshua\Waikato University\COMP 241\DIY Street View\Images"; // This WILL be put into a Config file on the Local filesystem, IN THE FUTURE.
         // The next 2 lines are Requred for AForge.net.
         private static FilterInfoCollection VideoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
         private VideoCaptureDevice[] Cam = new VideoCaptureDevice[VideoDevices.Count];
@@ -69,7 +69,24 @@ namespace WebCam_Grab
             }
             catch (Exception error)
             {
-                MessageBox.Show(error.Message);
+                MessageBox.Show("GPS ERROR: " + error.Message);
+            }
+            try
+            {
+                arduino.Open();
+                if (arduino.IsOpen)
+                {
+                    string text = "-DIY Streetview---GPS Monitor--";
+                    while (text.Length < 32)
+                    {
+                        text += " ";
+                    }
+                    arduino.Write(text);
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show("Arduino ERROR: " + error.Message);
             }
             ImagePathTextbox.Text = imagepath; // Init the Directory Text Box.
             folderBrowser.SelectedPath = imagepath; // Set the Default Path for the folder Browser.
@@ -146,6 +163,7 @@ namespace WebCam_Grab
             Dataout.Close();
             Dataout.Dispose();
             serialPort.Close();
+            arduino.Close();
         }
         /// <summary>
         /// Does all the code when the "Browse" Button is Clicked.
@@ -217,7 +235,6 @@ namespace WebCam_Grab
                         Cam[CID + 2].Start();
                     }
                     TakePicture[CID] = false;
-                    Bitmap b = (Bitmap)args.Frame.Clone();
                     Cam[CID].SignalToStop();
                     if ((CID + 2) < Cam.Length && Cam[CID + 2] != null)
                     {
@@ -277,6 +294,29 @@ namespace WebCam_Grab
             if (GPSSTATUS == 1 && GPSPRESENT)
             {
                 gpslabel.Text = "GPS: Latitude: " + GPSLAT + " Longitude: " + GPSLONG; // If there is a Valid Lock, update the Label.
+                if (arduino.IsOpen && arduino.BytesToWrite == 0)
+                {
+                    string tmplat = "LAT: " + GPSLAT;
+                    string tmplong = "LNG: " + GPSLONG;
+                    while (tmplat.Length < 16)
+                    {
+                        tmplat += " ";
+                    }
+                    while (tmplong.Length < 16)
+                    {
+                        tmplong += " ";
+                    }
+                    string ardustring = tmplat + tmplong;
+                    while (ardustring.Length < 32)
+                    {
+                        ardustring += " ";
+                    }
+                    while (arduino.BytesToWrite > 0)
+                    {
+                        Thread.Sleep(1);
+                    }
+                    arduino.Write(ardustring);
+                }
             }
             else if (GPSSTATUS == 0 && GPSPRESENT)
             {
@@ -285,6 +325,15 @@ namespace WebCam_Grab
             else
             {
                 gpslabel.Text = "GPS: No GPS Present. Storing " + GPSLAT + "S," + GPSLONG + "E"; // No GPS, Stating the LKL.
+                if (arduino.IsOpen)
+                {
+                    string text = "-DIY Streetview---GPS Monitor--";
+                    while (text.Length < 32)
+                    {
+                        text += " ";
+                    }
+                    arduino.Write(text);
+                }
             }
         }
         /// <summary>

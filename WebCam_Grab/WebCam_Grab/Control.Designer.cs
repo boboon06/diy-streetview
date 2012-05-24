@@ -50,6 +50,7 @@
             this.LabelCameraStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.labelDirection = new System.Windows.Forms.Label();
+            this.arduino = new System.IO.Ports.SerialPort(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -63,8 +64,8 @@
             // 
             // ImagePathTextbox
             // 
-            this.ImagePathTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ImagePathTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.ImagePathTextbox.Location = new System.Drawing.Point(71, 55);
             this.ImagePathTextbox.Name = "ImagePathTextbox";
             this.ImagePathTextbox.ReadOnly = true;
@@ -104,9 +105,9 @@
             // 
             // Checkerpanel
             // 
-            this.Checkerpanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Checkerpanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.Checkerpanel.AutoScroll = true;
             this.Checkerpanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Checkerpanel.Location = new System.Drawing.Point(12, 81);
@@ -242,9 +243,8 @@
             // 
             // serialPort
             // 
-            this.serialPort.DtrEnable = true;
             this.serialPort.Handshake = System.IO.Ports.Handshake.XOnXOff;
-            this.serialPort.PortName = "COM2";
+            this.serialPort.PortName = "COM3";
             // 
             // labelDirection
             // 
@@ -254,6 +254,12 @@
             this.labelDirection.Size = new System.Drawing.Size(140, 13);
             this.labelDirection.TabIndex = 14;
             this.labelDirection.Text = "Direction: Waiting on GPS...";
+            // 
+            // arduino
+            // 
+            this.arduino.PortName = "COM4";
+            this.arduino.StopBits = System.IO.Ports.StopBits.OnePointFive;
+            this.arduino.WriteBufferSize = 64;
             // 
             // Control
             // 
@@ -318,6 +324,7 @@
         private System.Windows.Forms.ToolStripStatusLabel LabelCameraStatus;
         private System.IO.Ports.SerialPort serialPort;
         private System.Windows.Forms.Label labelDirection;
+        private System.IO.Ports.SerialPort arduino;
     }
 }
 
