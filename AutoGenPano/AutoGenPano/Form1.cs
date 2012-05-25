@@ -20,36 +20,60 @@ namespace AutoGenPano
         private string libpanopath = @"D:\Joshua\Waikato University\COMP 241\DIY Street View\PanoTools\PanoTools";
         private void button1_Click(object sender, EventArgs e)
         {
+            int panoid = 0;
+            string[] cameraids = new string[8];
+            // Insert Each Camera ID here.
+            cameraids[0] = "Camera ID 1";
+            cameraids[1] = "Camera ID 2";
+            cameraids[2] = "Camera ID 3";
+            cameraids[3] = "Camera ID 4";
+            cameraids[4] = "Camera ID 5";
+            cameraids[5] = "Camera ID 6";
+            cameraids[6] = "Camera ID 7";
+            cameraids[7] = "Camera ID 8";
             if (!File.Exists(libpanopath + "\\PTStitcher.exe"))
             {
                 MessageBox.Show("ERROR: PanoTools NOT FOUND");
                 this.Close();
             }
-            if (!File.Exists(libpanopath + "\\diystreetview.txt"))
+            else if (!File.Exists(libpanopath + "\\diystreetview.txt"))
             {
                 MessageBox.Show("ERROR: PanoTools Stitching Script NOT FOUND");
                 this.Close();
             }
-            StreamReader csvinput = new StreamReader(imagepath + "\\imagelog.csv");
-            while (csvinput.Peek() != -1)
+            else
             {
-                string line = csvinput.ReadLine();
-                string[] values = line.Split(',');
-                if (values[5] != "8")
+                StreamReader csvinput = new StreamReader(imagepath + "\\imagelog.csv");
+                while (csvinput.Peek() != -1)
                 {
-                    MessageBox.Show("Error: GUID " + values[0] + " doesn't have all 8 cameras taking pictures... Skipping.","Panorama Generation Error",MessageBoxButtons.OK,MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    // TODO I need to set up the Constants for each of the cameras
-                    // and make C# Move them to the Pano Tools folder, and change their names to constents.
-                    // ALSO I need to set up the PT Script with said photos and TEST THEM.
-                    // AFTER CHRIS MAKES THE RIG.
-                    System.Diagnostics.Process ptsticher = new System.Diagnostics.Process();
-                    ptsticher.StartInfo.FileName = libpanopath + "\\PTStitcher.exe";
-                    ptsticher.StartInfo.Arguments = "-o " + values[0] + " diystreetview.txt";
-                    ptsticher.Start();
-                    ptsticher.WaitForExit();
+                    string line = csvinput.ReadLine();
+                    string[] values = line.Split(',');
+                    if (values[5] != "8")
+                    {
+                        MessageBox.Show("Error: GUID " + values[0] + " doesn't have all 8 cameras taking pictures... Skipping.", "Panorama Generation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        if (!File.Exists(imagepath + "\\Panoramas\\" + values[0] + ".jpg"))
+                        {
+                            panoid++;
+                            sitrepStatusLabel.Text = "Stitching Panorama No: " + panoid;
+                            int count_images = 0;
+                            while (count_images < 8)
+                            {
+                                File.Copy(imagepath + "\\RAW\\" + values[0] + cameraids[count_images] + ".bmp", libpanopath + "DIY" + (count_images + 1) + ".bmp", true);
+                                count_images++;
+                            }
+                            // ALSO I need to set up the PT Script with said photos and TEST THEM.
+                            // AFTER CHRIS MAKES THE RIG.
+                            System.Diagnostics.Process ptsticher = new System.Diagnostics.Process();
+                            ptsticher.StartInfo.FileName = libpanopath + "\\PTStitcher.exe";
+                            ptsticher.StartInfo.Arguments = "-o " + values[0] + " diystreetview.txt";
+                            ptsticher.Start();
+                            ptsticher.WaitForExit();
+                            File.Move(libpanopath + "\\" + values[0] + ".jpg", imagepath + "\\Panoramas\\" + values[0] + ".jpg");
+                        }
+                    }
                 }
             }
         }
