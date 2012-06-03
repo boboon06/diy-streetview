@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DIY Streetview -- Our shit is *custom*</title>
+	<meta charset="UTF-8">
+	<script src="https://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
+	<style>
+		html, body, #map_canvas {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+	<div id="map_canvas"></div>
+	<script type="text/javascript">
+		var panorama;
+
+		// Poor mans UUID validation
+		function is_uuid(pano) {
+			re = /^[a-zA-Z0-9]{8}-/;
+
+			console.log("Testing " + pano);
+			console.log(re.test(pano));
+			return re.test(pano);
+		}
+
+		function getCustomPanoramaURL(pano) {
+			if (is_uuid(pano)) {
+				return 'Panoramas/' + pano + '.bmp';
+			}
+			// We should change this to a "OMG NOT FOUND"
+			// Also should make a 'omg invlid pano image!!'
+			return 'https://google-developers.appspot.com/maps/documentation/javascript/examples/images/panoReception1024-0.jpg';
+		}
+
+		function getCustomPanorama(pano) {
+			if (!is_uuid(pano)) {
+				return null;
+			}
+			// If we're here, we need to serve up a fancy custom Panorama image! (We hope)
+			return {
+				location: {
+					pano: 'test',
+					description: 'test',
+					latLng: new google.maps.LatLng(-33.86684, 151.19583)
+				},
+				links: [],
+				tiles: {
+					tileSize: new google.maps.Size(1024, 512),
+					worldSize: new google.maps.Size(1024, 512),
+					centerHeading: 105,
+					getTileUrl: getCustomPanoramaURL
+				}
+			}
+		}
+
+		function createCustomLinks(entryPanoId) {
+			var links = panorama.getLinks();
+			var panoId = panorama.getPano();
+			
+			if (is_uuid(panoId)) {
+				// Do our logic here for adding in links
+				return;
+			}
+			if (panoId == entryPanoId) {
+				// Display our "Entry the Twilight Zone"
+				// This link should be our starting panorama
+				links.push({
+					heading: 25, // Tweak, tweak!
+					description: 'DIY Street View',
+					pano: 'REPLACE ME, FOR I AM NOT WORTHY'
+				});
+				return;
+			}
+		}
+
+		(function () {
+			var waikatoUni = new google.maps.LatLng(-37.787068, 175.312151);
+
+			var mapOptions = {
+				center: waikatoUni,
+				zoom: 16,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			}
+
+			var map = new google.maps.Map(
+				document.getElementById('map_canvas'), mapOptions
+			);
+
+			panorama = map.getStreetView();
+
+			var panoOptions = {
+				position: waikatoUni,
+				visible: true,
+				panoProvider: getCustomPanorama
+			}
+			panorama.setOptions(panoOptions);
+			
+			var streetviewService = new google.maps.StreetViewService();
+
+			// Secretly, I have no idea what the point in this radius is
+			var panoSearchRadius = 50;
+
+			// HOLLA BACK, FUNCTION!
+			streetviewService.getPanoramaByLocation(waikatoUni, panoSearchRadius, function(result, status) {
+				if (status == google.maps.StreetViewStatus.OK) {
+					google.maps.event.addListener(panorama, 'links_changed', function() {
+						createCustomLinks(result.location.pano);
+					});
+				}
+			});
+
+		})(); // Will execute onload since we're here already
+	</script>
+</body>
+</html>
