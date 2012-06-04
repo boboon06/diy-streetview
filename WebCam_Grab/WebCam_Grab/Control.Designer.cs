@@ -69,7 +69,7 @@
             this.ImagePathTextbox.Location = new System.Drawing.Point(71, 55);
             this.ImagePathTextbox.Name = "ImagePathTextbox";
             this.ImagePathTextbox.ReadOnly = true;
-            this.ImagePathTextbox.Size = new System.Drawing.Size(539, 20);
+            this.ImagePathTextbox.Size = new System.Drawing.Size(704, 20);
             this.ImagePathTextbox.TabIndex = 4;
             // 
             // labelImagePath
@@ -84,7 +84,7 @@
             // buttonBrowse
             // 
             this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBrowse.Location = new System.Drawing.Point(616, 55);
+            this.buttonBrowse.Location = new System.Drawing.Point(781, 55);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(75, 20);
             this.buttonBrowse.TabIndex = 6;
@@ -94,7 +94,6 @@
             // 
             // buttonCapture
             // 
-            this.buttonCapture.Enabled = false;
             this.buttonCapture.Location = new System.Drawing.Point(12, 12);
             this.buttonCapture.Name = "buttonCapture";
             this.buttonCapture.Size = new System.Drawing.Size(218, 37);
@@ -112,16 +111,16 @@
             this.Checkerpanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.Checkerpanel.Location = new System.Drawing.Point(12, 81);
             this.Checkerpanel.Name = "Checkerpanel";
-            this.Checkerpanel.Size = new System.Drawing.Size(679, 175);
+            this.Checkerpanel.Size = new System.Drawing.Size(431, 430);
             this.Checkerpanel.TabIndex = 10;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 262);
+            this.pictureBox1.Location = new System.Drawing.Point(449, 77);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(70, 52);
+            this.pictureBox1.Size = new System.Drawing.Size(210, 102);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 11;
             this.pictureBox1.TabStop = false;
@@ -130,9 +129,9 @@
             // 
             this.pictureBox2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox2.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pictureBox2.Location = new System.Drawing.Point(88, 262);
+            this.pictureBox2.Location = new System.Drawing.Point(665, 77);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(70, 52);
+            this.pictureBox2.Size = new System.Drawing.Size(191, 102);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 11;
             this.pictureBox2.TabStop = false;
@@ -141,9 +140,9 @@
             // 
             this.pictureBox3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox3.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pictureBox3.Location = new System.Drawing.Point(166, 262);
+            this.pictureBox3.Location = new System.Drawing.Point(449, 185);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(70, 52);
+            this.pictureBox3.Size = new System.Drawing.Size(210, 102);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox3.TabIndex = 11;
             this.pictureBox3.TabStop = false;
@@ -152,9 +151,9 @@
             // 
             this.pictureBox4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox4.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pictureBox4.Location = new System.Drawing.Point(242, 262);
+            this.pictureBox4.Location = new System.Drawing.Point(665, 185);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(70, 52);
+            this.pictureBox4.Size = new System.Drawing.Size(191, 102);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox4.TabIndex = 11;
             this.pictureBox4.TabStop = false;
@@ -163,9 +162,9 @@
             // 
             this.pictureBox5.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox5.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pictureBox5.Location = new System.Drawing.Point(318, 262);
+            this.pictureBox5.Location = new System.Drawing.Point(449, 293);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(70, 52);
+            this.pictureBox5.Size = new System.Drawing.Size(210, 102);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox5.TabIndex = 11;
             this.pictureBox5.TabStop = false;
@@ -174,9 +173,9 @@
             // 
             this.pictureBox6.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox6.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pictureBox6.Location = new System.Drawing.Point(394, 262);
+            this.pictureBox6.Location = new System.Drawing.Point(665, 293);
             this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(70, 52);
+            this.pictureBox6.Size = new System.Drawing.Size(191, 102);
             this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox6.TabIndex = 11;
             this.pictureBox6.TabStop = false;
@@ -185,9 +184,9 @@
             // 
             this.pictureBox7.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox7.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pictureBox7.Location = new System.Drawing.Point(472, 262);
+            this.pictureBox7.Location = new System.Drawing.Point(449, 401);
             this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(70, 52);
+            this.pictureBox7.Size = new System.Drawing.Size(210, 102);
             this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox7.TabIndex = 11;
             this.pictureBox7.TabStop = false;
@@ -196,9 +195,9 @@
             // 
             this.pictureBox8.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.pictureBox8.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.pictureBox8.Location = new System.Drawing.Point(548, 262);
+            this.pictureBox8.Location = new System.Drawing.Point(665, 401);
             this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(70, 52);
+            this.pictureBox8.Size = new System.Drawing.Size(191, 102);
             this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox8.TabIndex = 11;
             this.pictureBox8.TabStop = false;
@@ -223,9 +222,9 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LastGUIDLabel,
             this.LabelCameraStatus});
-            this.statusStrip.Location = new System.Drawing.Point(0, 317);
+            this.statusStrip.Location = new System.Drawing.Point(0, 514);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(703, 22);
+            this.statusStrip.Size = new System.Drawing.Size(868, 22);
             this.statusStrip.TabIndex = 13;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -243,8 +242,9 @@
             // 
             // serialPort
             // 
-            this.serialPort.Handshake = System.IO.Ports.Handshake.XOnXOff;
+            this.serialPort.DtrEnable = true;
             this.serialPort.PortName = "COM3";
+            this.serialPort.RtsEnable = true;
             // 
             // labelDirection
             // 
@@ -265,7 +265,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(703, 339);
+            this.ClientSize = new System.Drawing.Size(868, 536);
             this.Controls.Add(this.labelDirection);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.gpslabel);

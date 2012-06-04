@@ -73,6 +73,7 @@ namespace WebCam_Grab
             }
             try
             {
+                //Some nice Debug Data for my Arduino LCD Screen.
                 arduino.Open();
                 if (arduino.IsOpen)
                 {
@@ -121,11 +122,16 @@ namespace WebCam_Grab
             while (CountDevices < CamSource.Count)
             {
                 /// This sets up all the Camera Checkboxes... At Runtime, Completely Dynamicly
+                /// And For lazy reasongs it will try to automaticly set the Lifecams to take pictures (Cos I'm lazy, and a 3 KG laptop hurts to hold on one arm)
                 CheckedDevices[CountDevices] = new CheckBox();
                 CheckedDevices[CountDevices].Location = new System.Drawing.Point(10, (17 * CountDevices) + 5);
                 CheckedDevices[CountDevices].Text = CamSource[CountDevices].Name + " (ID: " + CamSource[CountDevices].DevID + ")";
                 CheckedDevices[CountDevices].TextAlign = ContentAlignment.MiddleRight;
                 CheckedDevices[CountDevices].CheckAlign = ContentAlignment.MiddleLeft;
+                if (CamSource[CountDevices].Name.ToLower().Contains("lifecam"))
+                {
+                    CheckedDevices[CountDevices].Checked = true;
+                }
                 CheckedDevices[CountDevices].AutoSize = true;
                 CheckedDevices[CountDevices].CheckedChanged += new EventHandler(UpdateCamStatus);
                 Checkerpanel.Controls.Add(CheckedDevices[CountDevices]);
@@ -155,7 +161,7 @@ namespace WebCam_Grab
                 {
                     if (Cam[CountCameras].IsRunning)
                     {
-                        Cam[CountCameras].SignalToStop();
+                        Cam[CountCameras].WaitForStop();
                     }
                 }
                 CountCameras++;
@@ -212,6 +218,10 @@ namespace WebCam_Grab
                 Dataout.WriteLine(guid + "," + GPSLAT + "," + GPSLONG + "," + DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year + "," + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + "," + CounttmpCID);
             }
             LastGUIDLabel.Text = "Last GUID: " + guid;
+            LabelCameraStatus.Text = "Reseting Cameras";
+            Cam[0].WaitForStop();
+            Cam[1].WaitForStop();
+            LabelCameraStatus.Text = "Taking Pictures";
             Cam[0].Start();
             Cam[1].Start();
         }
@@ -224,9 +234,16 @@ namespace WebCam_Grab
         /// <param name="CID">The Camera's Runtime ID (Unlikely to stay the same)</param>
         private void Cam_NewFrame(object sender, NewFrameEventArgs args, string DevID, int CID)
         {
+            if (camframe[CID] >= 45)
+            {
+                if ((CID + 1) == Cam.Length)
+                {
+                    MessageBox.Show("All photos Taken", "Success...", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
             if (TakePicture[CID] == true)
             {
-                if (camframe[CID] >= 90)
+                if (camframe[CID] >= 45)
                 {
                     Bitmap b = (Bitmap)args.Frame.Clone();
                     Cam[CID].SignalToStop();
@@ -235,15 +252,10 @@ namespace WebCam_Grab
                         Cam[CID + 2].Start();
                     }
                     TakePicture[CID] = false;
-                    Cam[CID].SignalToStop();
-                    if ((CID + 2) < Cam.Length && Cam[CID + 2] != null)
-                    {
-                        Cam[CID + 2].Start();
-                    }
                     string tmppath = imagepath + "\\RAW";
-                    b.Save(tmppath + "\\" + guid + "." + DevID + ".bmp"); // Uncommpressed Storage of the Raw Data Stream, Better for Time and Quality.
+                    b.Save(tmppath + "\\" + guid + "." + DevID + ".bmp", ImageFormat.Bmp); // Uncommpressed Storage of the Raw Data Stream, Better for Time and Quality.
                     int CounttmpCID = 0;
-                    while (CounttmpCID < tmpcid.Length && tmpcid[CounttmpCID].ToString() != DevID)
+                    while (CounttmpCID < tmpcid.Length && tmpcid[CounttmpCID] != null && tmpcid[CounttmpCID].ToString() != DevID)
                     {
                         CounttmpCID++; // If the Camera's DevID isn't the same as the current CID's Dev ID, then We need to try the next one.
                     }
@@ -273,7 +285,7 @@ namespace WebCam_Grab
         /// </summary>
         private void InitSources()
         {
-            Size FrameSize = new Size(1600, 1200); // 1600x1200 = 2 MP
+            Size FrameSize = new Size(1280, 720); // 1600x1200 = 2 MP; 1280x720 = 0.94MP
             int CountCameraInit = 0;
             while (CountCameraInit < CamSource.Count)
             {
@@ -361,7 +373,7 @@ namespace WebCam_Grab
             {
                 if (CheckedDevices[CountChecked].Checked == false && Cam[CountChecked].IsRunning == true)
                 {
-                    Cam[CountChecked].SignalToStop();
+                    Cam[CountChecked].WaitForStop();
                 }
                 CountChecked++;
             }
@@ -433,5 +445,6 @@ namespace WebCam_Grab
                 GPSPRESENT = false; // And no GPS Device.
             }
         }
+
     }
 }
